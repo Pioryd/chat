@@ -1,0 +1,29 @@
+@import "~bootstrap/scss/bootstrap";
+
+.received-message-avatar {
+  width: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.received-message-text-area {
+  border: 1px bold;
+  border-radius: 25px;
+  padding: 10px 15px 10px 15px;
+  margin: 0px 100px 0px 0px;
+  background-color: #ececec;
+  color: #000;
+  float: left;
+}
+
+.sent-message-text-area {
+  border: 1px bold;
+  border-radius: 25px;
+  padding: 10px 15px 10px 15px;
+  margin: 0px 10px 0px 100px;
+  background-color: #1984ff;
+  color: #fff;
+  float: right;
+}
