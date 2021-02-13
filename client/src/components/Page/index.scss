@@ -1,0 +1,32 @@
+@import "~bootstrap/scss/bootstrap";
+@import "../../../sass/variables";
+
+.main-window {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: #f7f7f7;
+
+  .main-container {
+    height: $main-container-height;
+    max-width: 700px;
+    background-color: #ffffff;
+
+    .left-column {
+      max-height: $main-container-height;
+      max-width: 300px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .right-column {
+      height: $main-container-height;
+      max-width: 400px;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
