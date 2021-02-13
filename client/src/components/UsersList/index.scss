@@ -1,0 +1,12 @@
+@import "~bootstrap/scss/bootstrap";
+@import "../../../sass/variables";
+
+.users-list {
+  max-height: $main-container-height;
+  overflow: auto;
+  padding: 0;
+
+  .user:hover {
+    background-color: #a7c5ff;
+  }
+}
