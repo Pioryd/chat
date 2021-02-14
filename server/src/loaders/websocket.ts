@@ -1,6 +1,8 @@
 import WebSocket from "ws";
 
 import { Store, Packet } from "../protocol/types";
+import * as parse from "../protocol/parse";
+import * as send from "../protocol/send";
 
 export function load(store: Store) {
   store.server = require("http").createServer(store.app);
@@ -17,10 +19,13 @@ export function load(store: Store) {
     console.log("New connection: " + ipv6);
 
     webSocket.on("close", () => {
+      send.logout(webSocket, store);
       console.log("Disconnected.");
     });
 
     webSocket.on("message", (data: string) => {
+      const { packetId, packetData } = JSON.parse(data) as Packet;
+      (<any>parse)[packetId](webSocket, packetData, store);
     });
   });
 }
