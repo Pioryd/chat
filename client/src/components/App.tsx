@@ -1,14 +1,17 @@
 import "./App.scss";
 
-import AppProvider from "../context/app";
+import { AppContext } from "../context/app";
+import useApp from "../hooks/useApp";
 
 import Page from "./Page";
 
 function App() {
+  const appValue = useApp();
+
   return (
-    <AppProvider>
+    <AppContext.Provider value={appValue}>
       <Page />
-    </AppProvider>
+    </AppContext.Provider>
   );
 }
 
