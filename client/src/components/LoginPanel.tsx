@@ -4,12 +4,28 @@ import { InputGroup, FormControl, Button, Row, Col } from "react-bootstrap";
 
 import { AppContext, AppContextType } from "../context/app";
 
+import validate from "../util/validate";
+
 export default function LoginPanel() {
   const { fn } = React.useContext(AppContext) as AppContextType;
 
   const [name, setName] = React.useState("");
+  const [showError, setShowError] = React.useState("");
 
-  const login = () => fn.login({ name });
+  const onUpdateName = (name: string) => {
+    setName(name);
+    setShowError("");
+  };
+
+  const login = () => {
+    try {
+      validate({ name });
+
+      fn.login({ name });
+    } catch (err) {
+      setShowError(err.message);
+    }
+  };
 
   return (
     <div className="h-100 w-100 d-flex align-items-center justify-content-center">
@@ -21,8 +37,12 @@ export default function LoginPanel() {
                 placeholder="Enter name"
                 aria-label="Enter name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => onUpdateName(e.target.value)}
+                isInvalid={showError !== ""}
               />
+              <FormControl.Feedback type="invalid">
+                {showError}
+              </FormControl.Feedback>
             </InputGroup>
           </Col>
         </Row>

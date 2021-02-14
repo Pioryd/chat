@@ -1,5 +1,7 @@
 import WebSocket from "ws";
 
+import validate from "../util/validate";
+
 import * as send from "./send";
 import { Store } from "./types";
 
@@ -7,6 +9,8 @@ export function login(webSocket: WebSocket, data: any, store: Store) {
   try {
     const { name } = data;
     const { users } = store;
+
+    validate({ name });
 
     if (users[name] == null) users[name] = { webSocket };
 
@@ -38,6 +42,10 @@ export function message(webSocket: WebSocket, data: any, store: Store) {
     let from = Object.keys(users).filter(
       (name) => users[name].webSocket === webSocket
     )[0];
+
+    validate({ name: to });
+    validate({ name: from });
+    validate({ message: text });
 
     if (users[to] == null) return;
     if (from == null) return;

@@ -10,6 +10,8 @@ import {
 
 import { AppContext, AppContextType } from "../../context/app";
 
+import validate from "../../util/validate";
+
 import Message from "./Message";
 
 import "./index.scss";
@@ -22,13 +24,23 @@ export default function MessagesList() {
   const bottomListRef = React.useRef<HTMLDivElement>(null);
 
   const [text, setText] = React.useState("");
+  const [showError, setShowError] = React.useState("");
+
+  const onUpdateText = (name: string) => {
+    setText(name);
+    setShowError("");
+  };
 
   const send = () => {
-    if (text === "" || targetUser === "") return;
+    try {
+      validate({ message: text });
+      console.log(`[${text}]`);
+      fn.message({ to: targetUser, text });
 
-    fn.message({ to: targetUser, text });
-
-    setText("");
+      setText("");
+    } catch (err) {
+      setShowError(err.message);
+    }
   };
 
   React.useEffect(() => {
@@ -80,6 +92,9 @@ export default function MessagesList() {
                 />
               </ListGroup.Item>
             ))}
+
+          <div className="text-danger text-center">{showError}</div>
+
           <div ref={bottomListRef} />
         </ListGroup>
         <div ref={bottomListRef} />
@@ -91,8 +106,10 @@ export default function MessagesList() {
             placeholder="Enter message"
             aria-label="Enter message"
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => onUpdateText(e.target.value)}
+            isInvalid={showError !== ""}
           />
+
           <InputGroup.Append>
             <Button className="h-100" variant="primary" onClick={send}>
               send
