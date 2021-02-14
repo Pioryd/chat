@@ -44,21 +44,19 @@ const AppProvider: React.FC = ({ children }) => {
   };
 
   const send = (packetId: string, packetData?: any) => {
-    webSocket.send(packetId, packetData);
-
-    if (packetId === "message") {
+    if (packetId === "login") {
+      webSocket.connect({ packetId, packetData });
+    } else if (packetId === "message") {
       messagesHook.add(targetUser, "sent", packetData.text);
     }
+
+    webSocket.send(packetId, packetData);
   };
 
   React.useEffect(() => {
     // Parse all messages
     for (const packet of webSocket.pop()) parse(packet);
   }, [webSocket.messages]);
-
-  React.useEffect(() => {
-    webSocket.connect({ packetId: "login", packetData: { name: mainUser } });
-  }, [mainUser]);
 
   React.useEffect(() => {
     // Auto refresh users list
