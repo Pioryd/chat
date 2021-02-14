@@ -4,6 +4,7 @@
 .main-window {
   position: absolute;
   display: flex;
+  direction: row;
   justify-content: center;
   align-items: center;
   height: 100%;
@@ -16,14 +17,14 @@
     background-color: #ffffff;
 
     .left-column {
-      max-height: $main-container-height;
+      max-height: $main-container-content-height;
       max-width: 300px;
       margin: 0;
       padding: 0;
     }
 
     .right-column {
-      height: $main-container-height;
+      height: $main-container-content-height;
       max-width: 400px;
       margin: 0;
       padding: 0;

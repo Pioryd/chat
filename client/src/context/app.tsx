@@ -25,7 +25,7 @@ const AppProvider: React.FC = ({ children }) => {
   const messagesHook = useMessages();
   const webSocket = useWebSocket();
 
-  const [mainUser, setMainUser] = React.useState(String(Date.now()));
+  const [mainUser, setMainUser] = React.useState("");
   const [targetUser, setTargetUser] = React.useState("");
   const [loggedIn, setLoggedIn] = React.useState(false);
 
@@ -33,6 +33,8 @@ const AppProvider: React.FC = ({ children }) => {
     const { packetId, packetData } = packet;
 
     if (packetId === "login") {
+      const { name } = packetData;
+      setMainUser(name);
       setLoggedIn(true);
     } else if (packetId === "usersList") {
       const { users } = packetData;
@@ -46,6 +48,12 @@ const AppProvider: React.FC = ({ children }) => {
   const send = (packetId: string, packetData?: any) => {
     if (packetId === "login") {
       webSocket.connect({ packetId, packetData });
+      return;
+    } else if (packetId === "logout") {
+      setMainUser("");
+      setLoggedIn(false);
+      webSocket.disconnect();
+      return;
     } else if (packetId === "message") {
       messagesHook.add(targetUser, "sent", packetData.text);
     }

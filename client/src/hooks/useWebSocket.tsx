@@ -44,7 +44,10 @@ export default function useWebSocket() {
     setWebSocket(newWebSocket);
   };
 
-  const disconnect = () => setWebSocket(undefined);
+  const disconnect = () => {
+    if (webSocket) webSocket.close();
+    setWebSocket(undefined);
+  };
 
   React.useEffect(() => connect(packetOnReconnect), []);
 

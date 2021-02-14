@@ -3,7 +3,7 @@ import WebSocket from "ws";
 import { Store } from "./types";
 import { send } from "./util";
 
-// Args order:
+// Optional args order:
 //  webSocket -> data -> store
 
 export function logout(webSocket: WebSocket, store: Store) {
@@ -17,8 +17,12 @@ export function logout(webSocket: WebSocket, store: Store) {
   usersListToEveryOne(store);
 }
 
-export function login(webSocket: WebSocket, store: Store) {
-  send(webSocket, "login", {});
+export function login(
+  webSocket: WebSocket,
+  data: { name: string },
+  store: Store
+) {
+  send(webSocket, "login", { name: data.name });
 }
 
 export function message(

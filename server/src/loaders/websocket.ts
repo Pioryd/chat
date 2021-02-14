@@ -25,7 +25,8 @@ export function load(store: Store) {
 
     webSocket.on("message", (data: string) => {
       const { packetId, packetData } = JSON.parse(data) as Packet;
-      (<any>parse)[packetId](webSocket, packetData, store);
+      if (packetId in <any>parse)
+        (<any>parse)[packetId](webSocket, packetData, store);
     });
   });
 }

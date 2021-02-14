@@ -13,7 +13,8 @@ export function login(webSocket: WebSocket, data: any, store: Store) {
     if (users[name].webSocket != webSocket)
       throw new Error(`User with same name[${name}] is already logged in.`);
 
-    if (webSocket.readyState === WebSocket.OPEN) send.login(webSocket, store);
+    if (webSocket.readyState === WebSocket.OPEN)
+      send.login(webSocket, { name }, store);
 
     send.usersListToEveryOne(store);
   } catch (err) {

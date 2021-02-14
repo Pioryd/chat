@@ -1,6 +1,9 @@
 $main-container-height: 500px;
+$main-container-topbar-height: 25px;
+$main-container-content-height: $main-container-height -
+  $main-container-topbar-height;
 
 $messages-topbar-height: 25px;
 $messages-input-height: 50px;
-$messages-list-height: $main-container-height - $messages-topbar-height -
+$messages-list-height: $main-container-content-height - $messages-topbar-height -
   $messages-input-height;
