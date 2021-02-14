@@ -9,7 +9,7 @@ export default function TopBar() {
     AppContext
   ) as AppContextType;
 
-  const logout = () => fn.send("logout");
+  const logout = () => fn.logout();
 
   return (
     <div

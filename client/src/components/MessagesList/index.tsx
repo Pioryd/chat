@@ -26,7 +26,7 @@ export default function MessagesList() {
   const send = () => {
     if (text === "" || targetUser === "") return;
 
-    fn.send("message", { to: targetUser, text });
+    fn.message({ to: targetUser, text });
 
     setText("");
   };

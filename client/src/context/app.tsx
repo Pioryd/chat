@@ -14,7 +14,9 @@ export interface AppContextType {
     setMainUser: (name: string) => void;
     setTargetUser: (name: string) => void;
     setLoggedIn: (state: boolean) => void;
-    send: (packetId: string, packetData?: any) => void;
+    login: (data: { name: string }) => void;
+    logout: () => void;
+    message: (data: { to: string; text: string }) => void;
   };
 }
 
@@ -45,24 +47,22 @@ const AppProvider: React.FC = ({ children }) => {
     }
   };
 
-  const send = (packetId: string, packetData?: any) => {
-    if (packetId === "login") {
-      webSocket.connect({ packetId, packetData });
-      return;
-    } else if (packetId === "logout") {
-      setMainUser("");
-      setLoggedIn(false);
-      webSocket.disconnect();
-      return;
-    } else if (packetId === "message") {
-      messagesHook.add(targetUser, "sent", packetData.text);
-    }
+  const login = (data: { name: string }) =>
+    webSocket.connect({ packetId: "login", packetData: data });
 
-    webSocket.send(packetId, packetData);
+  const logout = () => {
+    setMainUser("");
+    setLoggedIn(false);
+    webSocket.disconnect();
+  };
+
+  const message = (data: any) => {
+    messagesHook.add(targetUser, "sent", data.text);
+    webSocket.send("message", data);
   };
 
   React.useEffect(() => {
-    // Parse all messages
+    // Parse all packets
     for (const packet of webSocket.pop()) parse(packet);
   }, [webSocket.messages]);
 
@@ -82,7 +82,9 @@ const AppProvider: React.FC = ({ children }) => {
       setMainUser,
       setTargetUser,
       setLoggedIn,
-      send
+      login,
+      logout,
+      message
     }
   };
 

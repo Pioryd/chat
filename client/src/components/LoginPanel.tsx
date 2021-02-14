@@ -9,7 +9,7 @@ export default function LoginPanel() {
 
   const [name, setName] = React.useState("");
 
-  const login = () => fn.send("login", { name });
+  const login = () => fn.login({ name });
 
   return (
     <div className="h-100 w-100 d-flex align-items-center justify-content-center">
