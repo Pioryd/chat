@@ -5,6 +5,7 @@ export interface Messages {
   [key: string]: {
     type: MessageType;
     message: string;
+    time: Date;
   }[];
 }
 
@@ -14,7 +15,7 @@ export default function useMessages() {
   const add = (user: string, type: MessageType, message: string) => {
     if (!Array.isArray(messages[user])) messages[user] = [];
 
-    messages[user].push({ type, message });
+    messages[user].push({ type, message, time: new Date() });
     setMessages({ ...messages });
   };
 

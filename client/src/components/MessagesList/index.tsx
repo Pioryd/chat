@@ -76,6 +76,7 @@ export default function MessagesList() {
                   avatarBackgroundColor={users[targetUser]}
                   message={data.message}
                   type={data.type}
+                  time={data.time}
                 />
               </ListGroup.Item>
             ))}
