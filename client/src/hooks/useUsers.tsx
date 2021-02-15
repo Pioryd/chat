@@ -9,6 +9,8 @@ export interface Users {
 export default function useUsers() {
   const [users, setUsers] = React.useState<Users>({});
 
+  const clear = () => setUsers({});
+
   const update = (usersNames: string[]) => {
     const newUsers: Users = {};
 
@@ -30,5 +32,5 @@ export default function useUsers() {
     setUsers(newUsers);
   };
 
-  return { users, update };
+  return { users, update, clear };
 }

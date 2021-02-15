@@ -34,7 +34,7 @@ export default function MessagesList() {
   const send = () => {
     try {
       validate({ message: text });
-      console.log(`[${text}]`);
+
       fn.message({ to: targetUser, text });
 
       setText("");

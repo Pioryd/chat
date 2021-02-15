@@ -12,6 +12,8 @@ export interface Messages {
 export default function useMessages() {
   const [messages, setMessages] = React.useState<Messages>({});
 
+  const clear = () => setMessages({});
+
   const add = (user: string, type: MessageType, message: string) => {
     if (!Array.isArray(messages[user])) messages[user] = [];
 
@@ -19,10 +21,12 @@ export default function useMessages() {
     setMessages({ ...messages });
   };
 
-  const remove = (user: string) => {
-    delete messages[user];
+  const remove = (users: string[]) => {
+    if (users.length === 0) return;
+
+    for (const user of users) delete messages[user];
     setMessages({ ...messages });
   };
 
-  return { messages, add, remove };
+  return { messages, add, remove, clear };
 }

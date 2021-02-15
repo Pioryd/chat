@@ -45,7 +45,12 @@ export default function useWebSocket() {
   };
 
   const disconnect = () => {
-    if (webSocket) webSocket.close();
+    if (webSocket) {
+      webSocket.onopen = null;
+      webSocket.onmessage = null;
+      webSocket.onclose = null;
+      webSocket.close();
+    }
     setWebSocket(undefined);
   };
 

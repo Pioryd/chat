@@ -9,6 +9,8 @@ export default function useApp() {
   const messagesHook = useMessages();
   const webSocket = useWebSocket();
 
+  const ref = React.useRef<typeof webSocket | null>();
+
   const [mainUser, setMainUser] = React.useState("");
   const [targetUser, setTargetUser] = React.useState("");
   const [loggedIn, setLoggedIn] = React.useState(false);
@@ -33,9 +35,13 @@ export default function useApp() {
     webSocket.connect({ packetId: "login", packetData: data });
 
   const logout = () => {
-    setMainUser("");
-    setLoggedIn(false);
     webSocket.disconnect();
+    usersHook.clear();
+    messagesHook.clear();
+
+    setMainUser("");
+    setTargetUser("");
+    setLoggedIn(false);
   };
 
   const message = (data: any) => {
@@ -49,8 +55,27 @@ export default function useApp() {
   }, [webSocket.messages]);
 
   React.useEffect(() => {
+    const usersNames = Object.keys(usersHook.users);
+
+    if (!usersNames.includes(targetUser)) setTargetUser("");
+
+    messagesHook.remove(
+      Object.keys(messagesHook.messages).filter(
+        (userName) => !usersNames.includes(userName)
+      )
+    );
+  }, [usersHook.users]);
+
+  React.useEffect(() => {
+    ref.current = webSocket;
+  }, [webSocket]);
+
+  React.useEffect(() => {
     // Auto refresh users list
-    const intervalId = setInterval(() => webSocket.send("usersList"), 1000);
+    const intervalId = setInterval(
+      () => ref.current && ref.current.send("usersList"),
+      1000
+    );
     return () => clearInterval(intervalId);
   }, []);
 

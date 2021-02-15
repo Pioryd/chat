@@ -36,7 +36,12 @@ export function message(
 }
 
 export function usersList(webSocket: WebSocket, store: Store) {
-  send(webSocket, "usersList", { users: Object.keys(store.users) });
+  const { users } = store;
+  send(webSocket, "usersList", {
+    users: Object.keys(users).filter(
+      (name) => users[name].webSocket !== webSocket
+    )
+  });
 }
 
 export function usersListToEveryOne(store: Store) {
