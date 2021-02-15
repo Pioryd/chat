@@ -6,13 +6,16 @@ import { AppContext, AppContextType } from "../../context/app";
 
 import TopBar from "../TopBar";
 import LoginPanel from "../LoginPanel";
+import ReconnectingPanel from "../ReconnectingPanel";
 import MessagesList from "../MessagesList";
 import UsersList from "../UsersList";
 
 import "./index.scss";
 
 export default function Page() {
-  const { loggedIn } = React.useContext(AppContext) as AppContextType;
+  const { loggedIn, reconnecting } = React.useContext(
+    AppContext
+  ) as AppContextType;
 
   return (
     <>
@@ -26,7 +29,11 @@ export default function Page() {
           <Row className="h-100">
             <Col>
               {!loggedIn ? (
-                <LoginPanel />
+                !reconnecting ? (
+                  <LoginPanel />
+                ) : (
+                  <ReconnectingPanel />
+                )
               ) : (
                 <Row className="p-0 m-0">
                   <Col className="border left-column">

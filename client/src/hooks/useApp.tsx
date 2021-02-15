@@ -14,6 +14,11 @@ export default function useApp() {
   const [mainUser, setMainUser] = React.useState("");
   const [targetUser, setTargetUser] = React.useState("");
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [
+    packetOnReconnect,
+    setPacketOnReconnect
+  ] = React.useState<Packet | null>();
+  const [reconnecting, setReconnecting] = React.useState(false);
 
   const parse = (packet: Packet) => {
     const { packetId, packetData } = packet;
@@ -31,23 +36,44 @@ export default function useApp() {
     }
   };
 
-  const login = (data: { name: string }) =>
+  const login = (data: { name: string }) => {
+    setPacketOnReconnect({ packetId: "login", packetData: data });
     webSocket.connect({ packetId: "login", packetData: data });
+  };
 
   const logout = () => {
     webSocket.disconnect();
-    usersHook.clear();
-    messagesHook.clear();
-
-    setMainUser("");
-    setTargetUser("");
-    setLoggedIn(false);
+    clear();
+    setPacketOnReconnect(null);
   };
 
   const message = (data: any) => {
     messagesHook.add(targetUser, "sent", data.text);
     webSocket.send("message", data);
   };
+
+  const clear = () => {
+    usersHook.clear();
+    messagesHook.clear();
+
+    setMainUser("");
+    setTargetUser("");
+    setLoggedIn(false);
+
+    // only clear inside logout
+    // setPacketOnReconnect(null);
+  };
+
+  React.useEffect(() => {
+    setReconnecting(!loggedIn && packetOnReconnect != null);
+  }, [webSocket.disconnected, packetOnReconnect]);
+
+  React.useEffect(() => {
+    if (webSocket.disconnected === true) {
+      clear();
+      if (packetOnReconnect) webSocket.connect(packetOnReconnect);
+    }
+  }, [webSocket.disconnected]);
 
   React.useEffect(() => {
     // Parse all packets
@@ -85,6 +111,7 @@ export default function useApp() {
     mainUser,
     targetUser,
     loggedIn,
+    reconnecting,
     fn: {
       setMainUser,
       setTargetUser,

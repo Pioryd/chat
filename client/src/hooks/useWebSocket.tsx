@@ -4,10 +4,12 @@ export interface Packet {
   packetId: string;
   packetData: { [key: string]: any };
 }
+
 export default function useWebSocket() {
   const [webSocket, setWebSocket] = React.useState<WebSocket>();
   const [messages, setMessages] = React.useState<Packet[]>([]);
-  const [packetOnReconnect, setPacketOnReconnect] = React.useState<Packet>();
+
+  const [disconnected, setDisconnected] = React.useState(true);
 
   const pop = () => {
     if (messages.length === 0) return [];
@@ -16,16 +18,21 @@ export default function useWebSocket() {
     return returnMessages;
   };
 
-  const send = (packetId: string, packetData: any = {}) =>
-    webSocket && webSocket.send(JSON.stringify({ packetId, packetData }));
+  const send = (packetId: string, packetData: any = {}) => {
+    try {
+      webSocket &&
+        webSocket.readyState === WebSocket.OPEN &&
+        webSocket.send(JSON.stringify({ packetId, packetData }));
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
 
   const connect = (packetOnConnected: Packet | undefined) => {
     if (packetOnConnected == null) return;
 
     const newWebSocket = new WebSocket(String(process.env.REACT_APP_WS_URL));
     if (newWebSocket == null) return;
-
-    setPacketOnReconnect(packetOnConnected);
 
     newWebSocket.onopen = () => {
       console.log("Connected");
@@ -38,9 +45,10 @@ export default function useWebSocket() {
     newWebSocket.onclose = () => {
       console.log("Disconnected");
       console.log("Reconnecting...");
-      connect(packetOnReconnect);
+      setDisconnected(true);
     };
 
+    setDisconnected(false);
     setWebSocket(newWebSocket);
   };
 
@@ -54,7 +62,5 @@ export default function useWebSocket() {
     setWebSocket(undefined);
   };
 
-  React.useEffect(() => connect(packetOnReconnect), []);
-
-  return { messages, send, pop, connect, disconnect };
+  return { messages, disconnected, send, pop, connect, disconnect };
 }

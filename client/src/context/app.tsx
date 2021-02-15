@@ -9,6 +9,7 @@ export interface AppContextType {
   mainUser: string;
   targetUser: string;
   loggedIn: boolean;
+  reconnecting: boolean;
   fn: {
     setMainUser: (name: string) => void;
     setTargetUser: (name: string) => void;
