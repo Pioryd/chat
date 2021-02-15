@@ -14,12 +14,31 @@ export function load(store: Store) {
     );
   });
 
+  // To prevent browser driver connected when tab(page) is closed
+  setInterval(() => {
+    for (const userData of store.users.find({})) {
+      if (!userData.lastPacketTime) {
+        if (userData.webSocket) send.logout(userData.webSocket, store);
+        continue;
+      }
+
+      const seconds = (Date.now() - userData.lastPacketTime) / 1000;
+
+      // User list request is received every 1 second.
+      if (seconds > 5) {
+        store.users.removeOnce({ id: userData.id });
+        if (userData.webSocket) userData.webSocket.close();
+        console.log("Timeout.");
+      }
+    }
+  }, 1000);
+
   store.webSocketServer.on("connection", function (webSocket) {
     try {
       const ipv6 = (<any>webSocket)._socket.address().address;
       console.log("New connection: " + ipv6);
 
-      store.users.create({ webSocket });
+      store.users.create({ webSocket, lastPacketTime: Date.now() });
     } catch (err) {
       console.log(err.message);
     }
@@ -40,8 +59,10 @@ export function load(store: Store) {
         if (packetId !== "login" && store.users.findOnce({ webSocket }) == null)
           throw new Error(`Unable to parse. Socket is not belong to any user.`);
 
-        if (packetId in <any>parse)
+        if (packetId in <any>parse) {
+          store.users.updateOnce({ webSocket }, { lastPacketTime: Date.now() });
           (<any>parse)[packetId](webSocket, packetData, store);
+        }
       } catch (err) {
         console.log(err.message);
       }

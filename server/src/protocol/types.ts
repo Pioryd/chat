@@ -19,4 +19,5 @@ export interface UserData {
   id?: string;
   webSocket?: WebSocket;
   name?: string;
+  lastPacketTime?: number;
 }
