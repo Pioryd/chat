@@ -15,18 +15,36 @@ export function load(store: Store) {
   });
 
   store.webSocketServer.on("connection", function (webSocket) {
-    const ipv6 = (<any>webSocket)._socket.address().address;
-    console.log("New connection: " + ipv6);
+    try {
+      const ipv6 = (<any>webSocket)._socket.address().address;
+      console.log("New connection: " + ipv6);
+
+      store.users.create({ webSocket });
+    } catch (err) {
+      console.log(err.message);
+    }
 
     webSocket.on("close", () => {
-      send.logout(webSocket, store);
-      console.log("Disconnected.");
+      try {
+        send.logout(webSocket, store);
+        console.log("Disconnected.");
+      } catch (err) {
+        console.log(err.message);
+      }
     });
 
     webSocket.on("message", (data: string) => {
-      const { packetId, packetData } = JSON.parse(data) as Packet;
-      if (packetId in <any>parse)
-        (<any>parse)[packetId](webSocket, packetData, store);
+      try {
+        const { packetId, packetData } = JSON.parse(data) as Packet;
+
+        if (packetId !== "login" && store.users.findOnce({ webSocket }) == null)
+          throw new Error(`Unable to parse. Socket is not belong to any user.`);
+
+        if (packetId in <any>parse)
+          (<any>parse)[packetId](webSocket, packetData, store);
+      } catch (err) {
+        console.log(err.message);
+      }
     });
   });
 }

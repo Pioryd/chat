@@ -8,18 +8,15 @@ import { Store } from "./types";
 export function login(webSocket: WebSocket, data: any, store: Store) {
   try {
     const { name } = data;
-    const { users } = store;
 
     validate({ name });
 
-    if (users[name] == null) users[name] = { webSocket };
-
-    if (users[name].webSocket != webSocket)
+    if (store.users.findOnce({ name }) != null)
       throw new Error(`User with same name[${name}] is already logged in.`);
 
-    if (webSocket.readyState === WebSocket.OPEN)
-      send.login(webSocket, { name }, store);
+    store.users.updateOnce({ webSocket }, { name: data.name });
 
+    send.login(webSocket, { name }, store);
     send.usersListToEveryOne(store);
   } catch (err) {
     console.log(err.message);
@@ -37,20 +34,20 @@ export function usersList(webSocket: WebSocket, data: any, store: Store) {
 export function message(webSocket: WebSocket, data: any, store: Store) {
   try {
     const { to, text } = data;
-    const { users } = store;
 
-    let from = Object.keys(users).filter(
-      (name) => users[name].webSocket === webSocket
-    )[0];
+    const fromUserData = store.users.findOnce({ webSocket });
 
     validate({ name: to });
-    validate({ name: from });
+    validate({ name: fromUserData.name });
     validate({ message: text });
 
-    if (users[to] == null) return;
-    if (from == null) return;
+    const toUserData = store.users.findOnce({ name: to });
+    if (!toUserData || !toUserData.webSocket)
+      throw new Error(`User ${to} is not logged in.`);
 
-    send.message(users[to].webSocket, { from, text });
+    if (!fromUserData.name) throw new Error(`Message sender does not exist.`);
+
+    send.message(toUserData.webSocket, { from: fromUserData.name, text });
   } catch (err) {
     console.log(err.message);
   }

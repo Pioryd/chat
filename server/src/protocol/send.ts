@@ -7,12 +7,7 @@ import { send } from "./util";
 //  webSocket -> data -> store
 
 export function logout(webSocket: WebSocket, store: Store) {
-  const { users } = store;
-
-  const name = Object.keys(users).filter(
-    (key) => users[key].webSocket === webSocket
-  )[0];
-  if (name != null) delete users[name];
+  store.users.removeOnce({ webSocket });
 
   usersListToEveryOne(store);
 }
@@ -36,23 +31,28 @@ export function message(
 }
 
 export function usersList(webSocket: WebSocket, store: Store) {
-  const { users } = store;
-  send(webSocket, "usersList", {
-    users: Object.keys(users).filter(
-      (name) => users[name].webSocket !== webSocket
-    )
-  });
+  const usersData = store.users.find({});
+  const usersList: string[] = [];
+
+  for (const userData of usersData)
+    if (userData.name && userData.webSocket != webSocket)
+      usersList.push(userData.name);
+
+  send(webSocket, "usersList", { users: usersList });
 }
 
 export function usersListToEveryOne(store: Store) {
-  const { users } = store;
+  const usersData = store.users.find({});
 
-  // For everyone
-  for (const [name, user] of Object.entries(users)) {
-    if (user.webSocket.readyState !== WebSocket.OPEN) continue;
+  for (const userData of usersData) {
+    if (
+      !userData ||
+      !userData.name ||
+      !userData.webSocket ||
+      userData.webSocket.readyState !== WebSocket.OPEN
+    )
+      continue;
 
-    send(user.webSocket, "usersList", {
-      users: Object.keys(users).filter((value) => value !== name)
-    });
+    usersList(userData.webSocket, store);
   }
 }
