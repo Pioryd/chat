@@ -26,7 +26,9 @@ export default function Avatar(props: {
         }
       >
         <span className="d-inline-block">
-          <div className="lettered-avatar">{props.name[0].toUpperCase()}</div>
+          <div className="letter-avatar-text">
+            {props.name[0].toUpperCase()}
+          </div>
         </span>
       </OverlayTrigger>
     </div>

@@ -12,13 +12,18 @@ export default function useApp() {
   const ref = React.useRef<typeof webSocket | null>();
 
   const [mainUser, setMainUser] = React.useState("");
-  const [targetUser, setTargetUser] = React.useState("");
+  const [targetUser, _setTargetUser] = React.useState("");
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [
     packetOnReconnect,
     setPacketOnReconnect
   ] = React.useState<Packet | null>();
   const [reconnecting, setReconnecting] = React.useState(false);
+
+  const setTargetUser = (name: string) => {
+    usersHook.setUnreadMessages(name, false);
+    _setTargetUser(name);
+  };
 
   const parse = (packet: Packet) => {
     const { packetId, packetData } = packet;
@@ -33,6 +38,7 @@ export default function useApp() {
     } else if (packetId === "message") {
       const { from, text } = packetData;
       messagesHook.add(from, "received", text);
+      if (from !== targetUser) usersHook.setUnreadMessages(from, true);
     }
   };
 

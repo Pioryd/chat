@@ -66,7 +66,7 @@ export default function MessagesList() {
     <div className="messages-content overflow-none">
       <Row
         className="border messages-topbar"
-        style={{ backgroundColor: users[targetUser] }}
+        style={{ backgroundColor: users[targetUser].color }}
       >
         <h6
           className="mx-auto"
@@ -85,7 +85,7 @@ export default function MessagesList() {
               >
                 <Message
                   name={targetUser}
-                  avatarBackgroundColor={users[targetUser]}
+                  avatarBackgroundColor={users[targetUser].color}
                   message={data.message}
                   type={data.type}
                   time={data.time}

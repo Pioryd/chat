@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Row, Col, ListGroup } from "react-bootstrap";
+import { Row, Col, ListGroup, Badge } from "react-bootstrap";
 
 import { AppContext, AppContextType } from "../../context/app";
 
@@ -32,11 +32,22 @@ export default function UsersList() {
             <Col style={{ maxWidth: "60px" }}>
               <LetterAvatar
                 name={name}
-                backgroundColor={users[name]}
+                backgroundColor={users[name].color}
                 size="big"
               />
             </Col>
-            <Col>{name}</Col>
+            <Col className="text-truncate text-wrap overflow-hidden">
+              {name}
+            </Col>
+            <Col style={{ maxWidth: "60px" }}>
+              <Badge
+                hidden={!users[name].unreadMessages}
+                pill
+                variant="primary"
+              >
+                new
+              </Badge>
+            </Col>
           </Row>
         </ListGroup.Item>
       ))}
