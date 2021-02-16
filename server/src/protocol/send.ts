@@ -14,10 +14,10 @@ export function logout(webSocket: WebSocket, store: Store) {
 
 export function login(
   webSocket: WebSocket,
-  data: { name: string },
+  data: { name?: string },
   store: Store
 ) {
-  send(webSocket, "login", { name: data.name });
+  send(webSocket, "login", data);
 }
 
 export function message(

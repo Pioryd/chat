@@ -53,7 +53,7 @@ export default function MessagesList() {
     }
   }, [messages]);
 
-  if (targetUser === "")
+  if (targetUser === "" || users[targetUser] == null)
     return (
       <div className="d-flex h-100">
         <h6 className="mx-auto text-center justify-content-center align-self-center">

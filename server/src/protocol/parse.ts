@@ -11,8 +11,10 @@ export function login(webSocket: WebSocket, data: any, store: Store) {
 
     validate({ name });
 
-    if (store.users.findOnce({ name }) != null)
-      throw new Error(`User with same name[${name}] is already logged in.`);
+    if (store.users.findOnce({ name }) != null) {
+      send.login(webSocket, {}, store);
+      return;
+    }
 
     store.users.updateOnce({ webSocket }, { name: data.name });
 

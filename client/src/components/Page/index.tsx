@@ -6,7 +6,7 @@ import { AppContext, AppContextType } from "../../context/app";
 
 import TopBar from "../TopBar";
 import LoginPanel from "../LoginPanel";
-import ReconnectingPanel from "../ReconnectingPanel";
+import ConnectingPanel from "../ConnectingPanel";
 import MessagesList from "../MessagesList";
 import UsersList from "../UsersList";
 
@@ -32,7 +32,7 @@ export default function Page() {
                 !reconnecting ? (
                   <LoginPanel />
                 ) : (
-                  <ReconnectingPanel />
+                  <ConnectingPanel />
                 )
               ) : (
                 <Row className="p-0 m-0">

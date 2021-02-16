@@ -31,7 +31,7 @@ export default function useApp() {
     if (packetId === "login") {
       const { name } = packetData;
       setMainUser(name);
-      setLoggedIn(true);
+      if (name != null) setLoggedIn(true);
     } else if (packetId === "usersList") {
       const { users } = packetData;
       usersHook.update(users);
