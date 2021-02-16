@@ -42,7 +42,7 @@ export default function Page() {
                     </div>
                     <div className="border right-column">
                       <MessagesList />
-                    </div>{" "}
+                    </div>
                   </div>
                 </Row>
               )}

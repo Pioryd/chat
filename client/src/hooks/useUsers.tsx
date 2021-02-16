@@ -25,12 +25,7 @@ export default function useUsers() {
       if (!usersNames.includes(name)) delete newUsers[name];
 
     for (const name of usersNames) {
-      if (
-        name in newUsers ||
-        name.length < 3 ||
-        Object.keys(newUsers).length >= Number(process.env.MAX_USERS)
-      )
-        continue;
+      if (name in newUsers || name.length < 3) continue;
 
       const usedColors: string[] = [];
       for (const user of Object.values(newUsers)) usedColors.push(user.color);

@@ -12,9 +12,9 @@ export function load(store: Store) {
   store.app.use(cors());
 
   if (process.env.WEB_SERVER === "true") {
-    store.app.use(express.static(path.join(__dirname, "../..", "build")));
+    store.app.use(express.static(path.join(__dirname, "../../..", "build")));
     store.app.get("/*", (req, res) =>
-      res.sendFile(path.join(__dirname, "../..", "build", "index.html"))
+      res.sendFile(path.join(__dirname, "../../..", "build", "index.html"))
     );
   }
 
