@@ -2,7 +2,8 @@
 @import "../../../sass/variables";
 
 .messages-content {
-  height: $main-container-content-height;
+  position: relative;
+  height: 100%;
 
   .messages-topbar {
     height: $messages-topbar-height;
@@ -10,7 +11,7 @@
     padding: 0;
   }
   .messages-list {
-    height: $messages-list-height;
+    height: calc(100% - #{$messages-topbar-height} - #{$messages-input-height});
     overflow: auto;
     margin: 0;
     padding: 0;
@@ -20,5 +21,30 @@
     margin: 0;
     padding: 0;
     width: 100%;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .messages-content {
+    position: relative;
+    height: $main-content-height;
+
+    .messages-topbar {
+      height: $messages-topbar-height;
+      margin: 0;
+      padding: 0;
+    }
+    .messages-list {
+      height: $messages-list-height;
+      overflow: auto;
+      margin: 0;
+      padding: 0;
+    }
+    .messages-input {
+      height: $messages-input-height;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
   }
 }

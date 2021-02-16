@@ -2,32 +2,91 @@
 @import "../../../sass/variables";
 
 .main-window {
-  position: absolute;
-  display: flex;
-  direction: row;
-  justify-content: center;
-  align-items: center;
+  position: relative;
+  display: block;
   height: 100%;
   width: 100%;
-  background-color: #f7f7f7;
 
   .main-container {
-    height: $main-container-height;
-    max-width: 700px;
-    background-color: #ffffff;
+    position: fixed;
+    height: 100%;
+    max-width: 100%;
 
-    .left-column {
-      max-height: $main-container-content-height;
-      max-width: 300px;
+    .content {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
       margin: 0;
       padding: 0;
+      width: 100%;
+      height: 100%;
+
+      .left-column {
+        position: relative;
+        height: $main-left-column-height-mobile;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .right-column {
+        position: fixed;
+        top: calc(
+          #{$main-left-column-height-mobile} + #{$messages-topbar-height}
+        );
+        height: calc(
+          100% - #{$main-left-column-height-mobile} - #{$messages-topbar-height}
+        );
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
     }
+  }
+}
 
-    .right-column {
-      height: $main-container-content-height;
-      max-width: 400px;
-      margin: 0;
-      padding: 0;
+@media only screen and (min-width: 768px) {
+  .main-window {
+    position: absolute;
+    display: flex;
+    direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: #f7f7f7;
+
+    .main-container {
+      position: relative;
+      height: $main-container-height;
+      max-width: 700px;
+      background-color: #ffffff;
+
+      .content {
+        display: flex;
+        flex-wrap: nowrap;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: $main-content-height;
+
+        .left-column {
+          position: relative;
+          height: 100%;
+          width: 80%;
+          margin: 0;
+          padding: 0;
+        }
+
+        .right-column {
+          position: relative;
+          top: 0;
+          height: 100%;
+          width: 100%;
+          margin: 0;
+          padding: 0;
+        }
+      }
     }
   }
 }

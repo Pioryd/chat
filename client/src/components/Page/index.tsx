@@ -36,12 +36,14 @@ export default function Page() {
                 )
               ) : (
                 <Row className="p-0 m-0">
-                  <Col className="border left-column">
-                    <UsersList />
-                  </Col>
-                  <Col className="border right-column">
-                    <MessagesList />
-                  </Col>
+                  <div className="content">
+                    <div className="border left-column">
+                      <UsersList />
+                    </div>
+                    <div className="border right-column">
+                      <MessagesList />
+                    </div>{" "}
+                  </div>
                 </Row>
               )}
             </Col>

@@ -2,11 +2,25 @@
 @import "../../../sass/variables";
 
 .users-list {
-  max-height: $main-container-content-height;
+  position: relative;
+  height: 100%;
   overflow: auto;
   padding: 0;
 
   .user:hover {
     background-color: #a7c5ff;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .users-list {
+    position: relative;
+    height: 100%;
+    overflow: auto;
+    padding: 0;
+
+    .user:hover {
+      background-color: #a7c5ff;
+    }
   }
 }
