@@ -1,3 +1,5 @@
+import { config } from "dotenv/types";
+
 const path = require("path");
 const dotenv = require("dotenv");
 
