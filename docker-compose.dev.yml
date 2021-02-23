@@ -9,7 +9,7 @@ services:
     environment:
       NODE_ENV: "development"
     volumes:
-      - /$(pwd):/app
+      - ./:/app
 
   client:
     build:
@@ -17,4 +17,4 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - /$(pwd):/app
+      - ./:/app
