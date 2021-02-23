@@ -16,7 +16,7 @@ EXPOSE 80
 
 FROM base as test
 WORKDIR /app
-COPY --from=base . .
+COPY --from=base /app .
 CMD [ "npm", "run", "test" ]
 
 FROM node:12-alpine AS development

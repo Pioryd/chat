@@ -1,5 +1,7 @@
 # Chat online
 
+![main branch - test and build](https://github.com/Pioryd/chat-online/actions/workflows/docker-publish.yml/badge.svg?branch=main)
+
 ## Live preview: [DEMO](https://chat-305014.ew.r.appspot.com/)
 
 ## Build with
