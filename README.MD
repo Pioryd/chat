@@ -2,7 +2,7 @@
 
 ![main branch - test and build](https://github.com/Pioryd/chat-online/actions/workflows/docker-publish.yml/badge.svg?branch=main)
 
-## Live preview: [DEMO](https://chat-305014.ew.r.appspot.com/)
+## Live preview: [DEMO](http://ec2-13-58-22-232.us-east-2.compute.amazonaws.com/chat-online)
 
 ## Build with
 
